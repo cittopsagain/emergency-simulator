@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">CITEmergencySimulator</string>
+    <string name="app_name">CIT Emergency Simulator</string>
+    <string name="ground_floor">G</string>
+    <string name="first_floor">1</string>
+    <string name="second_floor">2</string>
+    <string name="search">Search</string>
 </resources>

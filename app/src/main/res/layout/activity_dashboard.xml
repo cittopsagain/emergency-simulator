@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/frame_layout_holder_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<include
+            android:id="@+id/dashboard_toolbar_id"
+            layout="@layout/custom_toolbar" />-->
+        <FrameLayout
+            android:id="@+id/container_body_frame_layout_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <!--<android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_anchor="@id/container_body_frame_layout_id"
+            app:layout_anchorGravity="bottom|right|end" />-->
+
+
+        <!--<Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_ground_floor"
+                android:text="@string/ground_floor"
+                android:layout_below="@id/container_body_frame_layout_id"/>-->
+
+        <!--<Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/btn_ground_floor"
+                android:id="@+id/btn_first_floor"
+                android:text="@string/first_floor"/>-->
+
+    </RelativeLayout>
+    <!--<android.support.design.widget.FloatingActionButton
+        android:src="@mipmap/ic_launcher"
+        app:fabSize="mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"/>-->
+
+    <!--<thesis.citemergencysimulator.helpers.MovableFloatingActionButton
+        android:src="@mipmap/ic_launcher"
+        app:fabSize="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        app:backgroundTint="@color/colorGold"
+        android:id="@+id/fab"
+        android:layout_marginBottom="15px"/>-->
+    <thesis.citemergencysimulator.helpers.MovableFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_floors"
+        android:scaleType="center"
+        app:backgroundTint="@color/colorGold"
+        app:layout_behavior="thesis.citemergencysimulator.helpers.FABFloatOnScroll" />
+
+    <include layout="@layout/fab_layout" />
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:src="@mipmap/ic_launcher"
+        app:fabSize="mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/fab"
+        android:layout_gravity="top"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_anchorGravity="top"/>-->
+</android.support.design.widget.CoordinatorLayout>
