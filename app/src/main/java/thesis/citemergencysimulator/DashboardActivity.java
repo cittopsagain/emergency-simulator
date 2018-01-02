@@ -20,12 +20,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import thesis.citemergencysimulator.areas.GroundFloor;
+import thesis.citemergencysimulator.areas.SecondFloor;
+import thesis.citemergencysimulator.areas.ThirdFloor;
 
 /**
  * Created by Dave Tolentin on 11/3/2017.
@@ -33,11 +36,20 @@ import thesis.citemergencysimulator.areas.GroundFloor;
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
     private final static String TAG = DashboardActivity.class.getSimpleName();
 
+    // NOTE:
+    // Increment 2 is on December 22
+
     private FrameLayout relativeLayout;
     private FloatingActionButton fabMainBtn;
     private FloatingActionButton fabGFloorBtn;
     private FloatingActionButton fabFFloorBtn;
     private FloatingActionButton fabSFloorBtn;
+
+    private Button btnGroundFloor;
+    private Button btnSecondFloor;
+    private Button btnThirdFloor;
+    private Button btnSearch;
+
     private SearchView searchView;
 
     // Save the FAB's active status
@@ -65,8 +77,20 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         relativeLayout = findViewById(R.id.container_body_frame_layout_id);
         relativeLayout.setOnClickListener(this);
+
+        btnGroundFloor = findViewById(R.id.btnGroundFloor);
+        btnSecondFloor = findViewById(R.id.btnSecondFloor);
+        btnThirdFloor = findViewById(R.id.btnThirdFloor);
+        btnSearch = findViewById(R.id.btnSearch);
+
+        btnGroundFloor.setOnClickListener(this);
+        btnSecondFloor.setOnClickListener(this);
+        btnThirdFloor.setOnClickListener(this);
+        btnSearch.setOnClickListener(this);
+
+        // Do not use floating action button as per request -->
         // Floating Action Buttons
-        fabMainBtn = findViewById(R.id.fab);
+        /*fabMainBtn = findViewById(R.id.fab);
         fabGFloorBtn = findViewById(R.id.fab_1);
         fabFFloorBtn = findViewById(R.id.fab_2);
         fabSFloorBtn = findViewById(R.id.fab_3);
@@ -82,15 +106,19 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         fabMainBtn.setOnClickListener(this);
         fabGFloorBtn.setOnClickListener(this);
         fabFFloorBtn.setOnClickListener(this);
-        fabSFloorBtn.setOnClickListener(this);
+        fabSFloorBtn.setOnClickListener(this);*/
 
-        displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
+        // Default the display to Ground Floor
+        displayView("Ground Floor Evacuation Route", new SecondFloorFragment(), "");
+        // Default to pressed state
+        btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Load the menu
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        // Remove the search in action bar as per request
+        /* getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Search...");
@@ -131,7 +159,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
+        });*/
         return true;
     }
 
@@ -147,6 +175,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    // Function to display each floor
     private void displayView(String title, Fragment fragment, String roomToPin) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -156,15 +185,46 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body_frame_layout_id, fragment);
             fragmentTransaction.commit();
-            getSupportActionBar().setTitle(title);
+            // getSupportActionBar().setTitle(title);
         }
     }
 
     @Override
     public void onClick(View view) {
-        // Determine the Fragment name
-        GroundFloorFragment g = new GroundFloorFragment();
-        if (view.getId() == R.id.fab) {
+        // Display the ground floor
+        if (view.getId() == R.id.btnGroundFloor) {
+            btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+            btnSecondFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            displayView("", new GroundFloorFragment(), "");
+            area = 1;
+        }
+
+        // Display the second floor
+        if (view.getId() == R.id.btnSecondFloor) {
+            btnSecondFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+            btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            btnGroundFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            displayView("", new SecondFloorFragment(), "");
+            area = 2;
+        }
+
+        // Display the third floor
+        if (view.getId() == R.id.btnThirdFloor) {
+            btnThirdFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+            btnGroundFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            btnSecondFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            displayView("", new ThirdFloorFragment(), "");
+            area = 3;
+        }
+
+        // Display the search dialog
+        if (view.getId() == R.id.btnSearch) {
+            showSearchDialog();
+        }
+
+        // Do not use floating action button as per request -->
+        /*if (view.getId() == R.id.fab) {
             if (fabStatus == false) {
                 // Display Floating Action Button Menus
                 expandFloatingActionButtons();
@@ -176,7 +236,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 fabStatus = false;
                 Log.e(TAG, "Close");
             }
-            // displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
+            displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
         } else if (view.getId() == R.id.fab_1) {
             displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
             // Open already
@@ -199,7 +259,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             }
             area = 3;
             displayView("Third Floor Evacuation Route", new ThirdFloorFragment(), "");
-        }
+        }*/
     }
 
     private void showAlertDialog(final ArrayList matched) {
@@ -230,6 +290,70 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 if (area == 1) {
                     displayView("Ground Floor Evacuation Route", new GroundFloorFragment(),
                             matched.get(position).toString());
+                }
+                Log.e(TAG, "Area: "+area);
+            }
+        });
+    }
+
+    // Search Dialog
+    private void showSearchDialog() {
+        ArrayList<String> groundFloorRooms = new ArrayList<>();
+        for (int i = 0; i < GroundFloor.where.length; i++) {
+            groundFloorRooms.add(GroundFloor.where[i]);
+        }
+
+        final AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this,
+                    android.R.style.Theme_Material_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = inflater.inflate(R.layout.list, null);
+        builder.setView(convertView);
+        String title = "Ground Floor";
+        String where[] = GroundFloor.where; // Default to ground floor
+        if (area == 2) {
+            title = "Second Floor";
+            where = SecondFloor.where;
+        }
+
+        if (area == 3) {
+            title = "Third Floor";
+            where = ThirdFloor.where;
+        }
+
+        builder.setTitle(title);
+        ListView lv = convertView.findViewById(R.id.list_view_results_id);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DashboardActivity.this,
+                android.R.layout.simple_list_item_1, where);
+        lv.setAdapter(adapter);
+
+        final AlertDialog dialog = builder.show();
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e(TAG, "Pin now!");
+                dialog.dismiss();
+                /**
+                 * area = 1 (Ground Floor)
+                 * area = 2 (Second Floor)
+                 * area = 3 (Third Floor)
+                 * where[position] = Holds the rooms in each floors
+                 */
+                if (area == 1) {
+                    displayView("Ground Floor Evacuation Route", new GroundFloorFragment(),
+                            GroundFloor.where[position]);
+                } else if (area == 2) {
+                    displayView("Ground Floor Evacuation Route", new SecondFloorFragment(),
+                            SecondFloor.where[position]);
+                } else {
+                    displayView("Third Floor Evacuation Route", new ThirdFloorFragment(),
+                            ThirdFloor.where[position]);
                 }
                 Log.e(TAG, "Area: "+area);
             }

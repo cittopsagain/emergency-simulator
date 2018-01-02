@@ -9,24 +9,24 @@ import android.view.View;
 /**
  * Created by Dave Tolentin on 11/6/2017.
  */
-public class MovableFloatingActionButton extends FloatingActionButton implements View.OnTouchListener {
+public class MovableActionButton extends FloatingActionButton implements View.OnTouchListener {
 
     private final static float CLICK_DRAG_TOLERANCE = 10; // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.
 
     private float downRawX, downRawY;
     private float dX, dY;
 
-    public MovableFloatingActionButton(Context context) {
+    public MovableActionButton(Context context) {
         super(context);
         init();
     }
 
-    public MovableFloatingActionButton(Context context, AttributeSet attrs) {
+    public MovableActionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MovableFloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MovableActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

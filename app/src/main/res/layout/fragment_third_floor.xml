@@ -8,14 +8,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/relative_layout_dynamic">
 
         <ImageView
             android:id="@+id/img_view_id_third_floor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <thesis.citemergencysimulator.builder.GroundFloorPathBuilder
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/img_view_marker"
+            android:src="@drawable/ic_marker"/>
+
+        <thesis.citemergencysimulator.builder.ThirdFloorPathBuilder
             android:id="@+id/img_view_id_third_floor_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

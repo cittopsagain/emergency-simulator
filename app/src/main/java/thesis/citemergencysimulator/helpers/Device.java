@@ -7,7 +7,7 @@ import android.util.DisplayMetrics;
 /**
  * Created by Dave Tolentin on 10/27/2017.
  */
-public class DeviceHelper {
+public class Device {
 
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -34,7 +34,7 @@ public class DeviceHelper {
     /**
      * This method converts device specific pixels to density independent pixels.
      *
-     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @param px A value in px (pixels) unit. Which we need to convert into dp
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent dp equivalent to px value
      */

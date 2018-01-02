@@ -11,57 +11,82 @@
         android:id="@+id/frame_layout_holder_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--<include
-            android:id="@+id/dashboard_toolbar_id"
-            layout="@layout/custom_toolbar" />-->
+
         <FrameLayout
             android:id="@+id/container_body_frame_layout_id"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <!--<android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:src="@mipmap/ic_launcher"
-            app:layout_anchor="@id/container_body_frame_layout_id"
-            app:layout_anchorGravity="bottom|right|end" />-->
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:layout_gravity="bottom">
 
-        <!--<Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/btn_ground_floor"
-                android:text="@string/ground_floor"
-                android:layout_below="@id/container_body_frame_layout_id"/>-->
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/round_button_default_state"
+            android:id="@+id/btnGroundFloor"
+            android:text="G"/>
 
-        <!--<Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/btn_ground_floor"
-                android:id="@+id/btn_first_floor"
-                android:text="@string/first_floor"/>-->
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/round_button_default_state"
+            android:id="@+id/btnSecondFloor"
+            android:layout_toRightOf="@id/btnGroundFloor"
+            android:text="2"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/round_button_default_state"
+            android:id="@+id/btnThirdFloor"
+            android:layout_toRightOf="@id/btnSecondFloor"
+            android:text="3"/>
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@mipmap/ic_search_white_24dp"
+            android:id="@+id/btnSearch"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
+
+        <!--<android.support.v7.widget.SearchView
+            android:id="@+id/btnSearch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            app:searchIcon="@mipmap/ic_search_white_24dp"
+            app:iconifiedByDefault="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true" />-->
 
     </RelativeLayout>
-    <!--<android.support.design.widget.FloatingActionButton
-        android:src="@mipmap/ic_launcher"
-        app:fabSize="mini"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"/>-->
 
-    <!--<thesis.citemergencysimulator.helpers.MovableFloatingActionButton
-        android:src="@mipmap/ic_launcher"
-        app:fabSize="normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        app:backgroundTint="@color/colorGold"
-        android:id="@+id/fab"
-        android:layout_marginBottom="15px"/>-->
-    <thesis.citemergencysimulator.helpers.MovableFloatingActionButton
+    <!-- Do not use floating action button as per request -->
+    <!--<thesis.citemergencysimulator.helpers.MovableActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,22 +95,8 @@
         android:src="@mipmap/ic_floors"
         android:scaleType="center"
         app:backgroundTint="@color/colorGold"
-        app:layout_behavior="thesis.citemergencysimulator.helpers.FABFloatOnScroll" />
+        app:layout_behavior="thesis.citemergencysimulator.helpers.FabFloatOnScroll" />
 
-    <include layout="@layout/fab_layout" />
+    <include layout="@layout/fab_layout" />-->
 
-    <!--<android.support.design.widget.FloatingActionButton
-        android:src="@mipmap/ic_launcher"
-        app:fabSize="mini"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/fab"
-        android:layout_gravity="top"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_anchorGravity="top"/>-->
 </android.support.design.widget.CoordinatorLayout>
