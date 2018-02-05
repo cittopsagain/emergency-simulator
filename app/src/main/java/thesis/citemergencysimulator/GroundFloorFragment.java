@@ -1,11 +1,15 @@
 package thesis.citemergencysimulator;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PathEffect;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +20,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import thesis.citemergencysimulator.areas.GroundFloor;
 import thesis.citemergencysimulator.helpers.Device;
 import thesis.citemergencysimulator.helpers.Image;
 import thesis.citemergencysimulator.builder.GroundFloorPathBuilder;
+import thesis.citemergencysimulator.helpers.SessionHelper;
 import thesis.citemergencysimulator.helpers.Touch;
 import thesis.citemergencysimulator.helpers.ZoomLayout;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Dave Tolentin on 10/27/2017.
@@ -37,6 +49,15 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
     private String value;
 
     private ZoomLayout zoomLayout;
+    private String currentDateTimeString;
+    private int pos;
+    private int idx;
+    private int buttonClicked = 0;
+    private int valAfterReload = -1;
+
+    private SessionHelper sessionHelper;
+
+    private CountDownTimer countDownTimer;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -51,10 +72,46 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
         zoomLayout = new ZoomLayout(getActivity(), this, this);
         imageHelper = new Image(getActivity());
         Bundle bundle = this.getArguments();
+        sessionHelper = new SessionHelper(getActivity());
+
         if (bundle != null) {
             value = bundle.getString("pin");
+            try {
+                pos = bundle.getInt("stairs");
+
+                // Refresh the fragment inorder for us to draw again the path
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(this).attach(this).commit();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            Log.e(TAG, "Value: "+value);
+        } else {
+            Log.e(TAG, "Value after fragment reload: "+valAfterReload);
+        }
+
+        try {
+            countDownTimer.cancel();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
+
+    /*@Override
+    public void onDetach() {
+        super.onDetach();
+
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }*/
 
     @Nullable
     @Override
@@ -68,9 +125,47 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
 
         imgMarker.setVisibility(View.GONE);
 
+        // Bring the marker at the top of button
+        /*imgMarker.bringToFront();
+        imgMarker.invalidate();*/
+
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(SessionHelper.PREF_NAME, MODE_PRIVATE);
+        int room = prefs.getInt("roomNum", -1);
+        Log.e(TAG, "Shared Preferences: "+room);
+
         try {
-            imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                    R.drawable.ic_ground_floor_old, 360, 360));
+            /*if (room >= 0) {
+                if (room == 0) {
+                    imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                            R.drawable.ic_ground_floor_1, 360, 360));
+                    Log.e(TAG, "Room 0");
+                }
+
+                if (room == 1) {
+                    if (room == 0) {
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_2, 360, 360));
+                        Log.e(TAG, "Room 1");
+                    }
+                }
+            } else {
+                imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                        R.drawable.ic_ground_floor_default, 360, 360));
+                Log.e(TAG, "Room 3");
+            }*/
+            // imgGroundFloor.setImageDrawable(null);
+            if (room == 0) {
+                /*imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                        R.drawable.ic_ground_floor_1, 360, 360));*/
+                Log.e(TAG, "Room 0");
+            } else if (room == 1) {
+                imgGroundFloor.setImageBitmap(null);
+                Log.e(TAG, "Room 1");
+            } else {
+                imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                        R.drawable.ic_ground_floor_default_1, 360, 360));
+                Log.e(TAG, "Room 3");
+            }
         } catch (OutOfMemoryError outOfMemoryError) {
             Toast.makeText(getActivity(), outOfMemoryError.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -78,50 +173,71 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
         Log.e(TAG, "Width: "+ Device.getScreenWidth()+" Height: "+ Device.getScreenHeight());
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Ground Floor Evacuation Route");
+        try {
+            countDownTimer = new CountDownTimer(1000000000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    Calendar c = Calendar.getInstance();
+                    currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                    try {
+                        // ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Third Floor Evacuation Route\t\t\t\t\t\t"+c.get(Calendar.MONTH)+" "+c.get(Calendar.DAY_OF_MONTH)+", "+c.get(Calendar.YEAR)+"\t"+c.get(Calendar.HOUR)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND));
+                        // ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Ground Floor Evacuation Route\t\t\t\t\t\t"+currentDateTimeString);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                public void onFinish() {
+
+                }
+            };
+            countDownTimer.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         final String rooms[] = {"Elementary Library", "Room 112", "Room 111", "Room 110", "Room 109",
                 "", "Room 108", "Room 107", "Room 106", "Room 105",
                 "", "Elementary Library", ""
         };
-
-        try {
-            int index = 0;
-            if (!value.equals("")) {
-                // Get the index
-                for (int i = 0; i < rooms.length; i++) {
-                    if (rooms[i] == value) {
-                        index = i;
-                        break;
-                    }
-                }
-                pathView.init(index, imgMarker);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        Log.e(TAG, "Here with position of "+pos);
 
         // 1080 x 1920
         int x = 60;
         int y = 170;
 
+        final Button roomButton[] = new Button[13];
         for (int i = 0; i < 13; i++) {
-            final Button roomButton = new Button(getActivity());
-            roomButton.setText(rooms[i]);
-            roomButton.setId(i);
-            roomButton.setTextColor(Color.parseColor("#909090"));
-            final int id = roomButton.getId();
+            idx = i;
+            // final Button roomButton = new Button(getActivity());
+            roomButton[i] = new Button(getActivity());
+            roomButton[i].setText(rooms[i]);
+            roomButton[i].setId(i);
+
+            // roomButton.setTextColor(Color.parseColor("#909090"));
+            roomButton[i].setTextColor(Color.parseColor("#ffffff"));
+
+            final int id = roomButton[i].getId();
 
             // Change the button text size
-            roomButton.setTextSize(6f);
+            roomButton[i].setTextSize(6f);
 
             // Change the button text style
-            roomButton.setTypeface(Typeface.DEFAULT_BOLD);
+            roomButton[i].setTypeface(Typeface.DEFAULT_BOLD);
+
+
+            /*if (i == 5 || i == 10) {
+                // Remove background color in right and left stairs
+                roomButton[i].setBackground(null);
+            } else {
+                roomButton[i].setBackgroundColor(Color.parseColor("#997829"));
+            }*/
 
             // Remove the background of button
-            roomButton.setBackground(null);
+            roomButton[i].setBackground(null);
 
             // Remove the padding inside button
-            roomButton.setPadding(0,0,0,0);
+            roomButton[i].setPadding(0,0,0,0);
             int btnWidth = 120;
             int btnHeight = 110;
             if (i == 5 || i == 10) {
@@ -140,7 +256,7 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                 btnHeight = 230;
             }
             // Change the button height and width
-            roomButton.setLayoutParams(new RelativeLayout.LayoutParams(btnWidth, btnHeight));
+            roomButton[i].setLayoutParams(new RelativeLayout.LayoutParams(btnWidth, btnHeight));
 
             // Left Rooms
             if (i == 1) {
@@ -180,81 +296,261 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
             }
 
             // Change the positioning
-            roomButton.setX(x);
-            roomButton.setY(y);
+            roomButton[i].setX(x);
+            roomButton[i].setY(y);
 
             RelativeLayout relativeLayout = rootView.findViewById(R.id.relative_layout_dynamic);
-            relativeLayout.addView(roomButton);
+            relativeLayout.addView(roomButton[i]);
 
-            roomButton.setOnClickListener(new View.OnClickListener() {
+            roomButton[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e(TAG, "Button id: "+v.getId()+"Index: "+idx);
+                    buttonClicked = v.getId();
+                    imgGroundFloor.setImageDrawable(null);
+                    // Change the default button color
+                    // roomButton.setBackgroundColor(Color.parseColor("#997829"));
+                    /*if (v.getId() == idx) {
+                        // roomButton.setBackgroundColor(Color.parseColor("#997829"));
+                        Toast.makeText(getActivity(), "Equal", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // roomButton.setBackgroundColor(Color.parseColor("#9b1516"));
+                        Toast.makeText(getActivity(), "Not equal", Toast.LENGTH_SHORT).show();
+                    }*/
+                    // roomButton.setBackgroundColor(Color.parseColor("#997829"));
+
+                    if (buttonClicked == 5 || buttonClicked == 10) {
+                        // Remove background color in right and left stairs
+                        // roomButton[buttonClicked].setBackground(null);
+                    } else {
+                        // roomButton[buttonClicked].setBackgroundColor(Color.parseColor("#997829"));
+                        // Pressed state
+                        // roomButton[v.getId()].setBackgroundColor(Color.parseColor("#9b1516"));
+                    }
+                    // Pressed state
+                    // roomButton[v.getId()].setBackgroundColor(Color.parseColor("#9b1516"));
+
+                    for (int j = 0; j < 13; j++) {
+                        if (j == 5 || j == 10) {
+                            // Skip the right and left stairs
+                            continue;
+                        }
+                        // Reset the background color of the button
+                        // Only the clicked button will change
+                        if (v.getId() != j) {
+                            // Default state
+                            // roomButton[j].setBackgroundColor(Color.parseColor("#997829"));
+                        }
+                    }
+
                     // Left Rooms
                     if (id == 0) {
                         // Left Elementary Library
+                        // pathView.init(0, imgMarker);
+                        /*Fragment frg = null;
+                        frg = getActivity().getSupportFragmentManager().findFragmentByTag("GroundFloorFragment");
+                        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                        ft.detach(frg);
+                        ft.attach(frg);
+                        ft.commit();*/
+                        // sessionHelper.setRoomNum(1);
+                        /*imgGroundFloor.setImageDrawable(null);
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_1, 360, 360));*/
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                        Fragment f = new GroundFloorFragment();
+                        sessionHelper.setRoomNum(0);
+                        /*Bundle b = new Bundle();
+                        b.putString("pin", "0");
+                        f.setArguments(b);*/
+                        // ft.detach(f).attach(f).commit();
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_1, 360, 360));
                         pathView.init(0, imgMarker);
+
+                        /*value = String.valueOf(id);
+                        valAfterReload = 0;*/
                     }
 
                     if (id == 1) {
+                        // ic_ground_floor_2
                         // Room 112
+                        // pathView.init(1, imgMarker);
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_2, 360, 360));
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                        Fragment f = new GroundFloorFragment();
+                        /*Bundle b = new Bundle();
+                        b.putString("pin", "1");
+                        f.setArguments(b);*/
+                        sessionHelper.setRoomNum(1);
+                        // ft.detach(f).attach(f).commit();
                         pathView.init(1, imgMarker);
                     }
 
                     if (id == 2) {
+                        // ic_ground_floor_3
                         // Room 111
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_3, 360, 360));
                         pathView.init(2, imgMarker);
                     }
 
                     if (id == 3) {
+                        // ic_ground_floor_4
                         // Room 110
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_4, 360, 360));
                         pathView.init(3, imgMarker);
                     }
 
                     if (id == 4) {
+                        // ic_ground_floor_5
                         // Room 109
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_5, 360, 360));
                         pathView.init(4, imgMarker);
                     }
 
                     if (id == 5) {
                         // Left stairs
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_default_1, 360, 360));
                         pathView.init(5, imgMarker);
                     }
 
                     if (id == 6) {
+                        // ic_ground_floor_6
                         // Room 108
+                        imgGroundFloor.setImageDrawable(null);
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_6, 360, 360));
                         pathView.init(6, imgMarker);
                     }
 
                     if (id == 7) {
+                        // ic_ground_floor_7
                         // Room 107
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_7, 360, 360));
                         pathView.init(7, imgMarker);
                     }
 
                     if (id == 8) {
+                        // ic_ground_floor_8
                         // Room 106
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_8, 360, 360));
                         pathView.init(8, imgMarker);
                     }
 
                     if (id == 9) {
+                        // ic_ground_floor_9
                         // Room 105
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_9, 360, 360));
                         pathView.init(9, imgMarker);
                     }
 
                     if (id == 10) {
                         // Right Stairs
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_default_1, 360, 360));
                         pathView.init(10, imgMarker);
                     }
 
                     if (id == 11) {
+                        // ic_ground_floor_10
                         // Right Elementary Library
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_10, 360, 360));
                         pathView.init(11, imgMarker);
                     }
 
                     if (id == 12) {
+                        // ic_ground_floor_11
+                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_11, 360, 360));
                         pathView.init(12, imgMarker);
                     }
                 }
             });
+        }
+
+        // From second floor path
+        if (pos > 0) {
+            pathView.init(pos, imgMarker);
+        }
+
+        /*SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(SessionHelper.PREF_NAME, MODE_PRIVATE);
+        int restoredText = prefs.getInt("roomNum", -1);
+        Log.e(TAG, "Shared Preferences: "+restoredText);
+        value = String.valueOf(restoredText);*/
+        try {
+            int index = 0;
+            // From search
+            if (!value.equals("")) {
+                imgGroundFloor.setImageDrawable(null);
+                Log.e(TAG, "Here >> "+index+" Value: "+value);
+                // Get the index
+                for (int i = 0; i < rooms.length; i++) {
+                    // if (rooms[i] == rooms[Integer.valueOf(value)]) {
+                    if (rooms[i] == value) {
+                        index = i;
+                        Log.e(TAG, "Found: "+i);
+                        break;
+                    }
+                }
+
+                int resId = R.drawable.ic_ground_floor_default;
+                imgGroundFloor.setImageDrawable(null);
+
+                if (index == 1) {
+                    resId = R.drawable.ic_ground_floor_2;
+                }
+
+                if (index == 2) {
+                    resId = R.drawable.ic_ground_floor_3;
+                }
+
+                if (index == 3) {
+                    resId = R.drawable.ic_ground_floor_4;
+                }
+
+                if (index == 4) {
+                    resId = R.drawable.ic_ground_floor_5;
+                }
+
+                if (index == 6) {
+                    resId = R.drawable.ic_ground_floor_6;
+                }
+
+                if (index == 7) {
+                    resId = R.drawable.ic_ground_floor_7;
+                }
+
+                if (index == 8) {
+                    resId = R.drawable.ic_ground_floor_8;
+                }
+
+                if (index == 9) {
+                    resId = R.drawable.ic_ground_floor_9;
+                }
+
+                imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
+                        resId, 360, 360));
+                Log.e(TAG, "Index: "+index);
+                // imgMarker.bringToFront();
+                pathView.init(index, imgMarker);
+
+                // Reset the value of the session
+                // sessionHelper.clearSession();
+
+                // Pressed state
+                // roomButton[index].setBackgroundColor(Color.parseColor("#9b1516"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return rootView;
@@ -301,5 +597,14 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                 break;
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "Destroyed!");
+
+        // Stop the countdown timer
+        // countDownTimer.cancel();
     }
 }

@@ -27,13 +27,21 @@ public class ThirdFloorPathBuilder extends View {
     private int height;
     private int width;
     private Context context;
+    private int position;
 
     private static final String TAG = GroundFloorPathBuilder.class.getSimpleName();
 
-    public ThirdFloorPathBuilder(Context context) {
+    public interface CallFragment {
+        void showSecondFloor(int position);
+    }
+
+    private static CallFragment callFragment = null;
+
+    public ThirdFloorPathBuilder(Context context, CallFragment callFragment, String p, String p1) {
         super(context);
         this.context = context;
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        this.callFragment = callFragment;
     }
 
     public ThirdFloorPathBuilder(Context context, AttributeSet attrs) {
@@ -52,12 +60,17 @@ public class ThirdFloorPathBuilder extends View {
         height = Device.getScreenHeight();
         width = Device.getScreenWidth();
 
+        // Bring the marker at the top of button
+        imgView.bringToFront();
+
         Log.e(TAG, "Width: " + width + " Height: " + height);
 
         paint = new Paint();
         paint.setColor(Color.RED);
-        paint.setStrokeWidth(3);
+        paint.setStrokeWidth(4);
         paint.setStyle(Paint.Style.STROKE);
+
+        position = direction;
 
         path = new Path();
         if ((width == 1920 || width == 1776) && height == 1080) {
@@ -130,7 +143,7 @@ public class ThirdFloorPathBuilder extends View {
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(ThirdFloorPathBuilder.this,
                 "phase", 1.0f, 0.0f);
-        animator.setDuration(5000);
+        animator.setDuration(3000);
         animator.start();
     }
 
@@ -138,8 +151,8 @@ public class ThirdFloorPathBuilder extends View {
         if (pos == 1) {
             // Left side
             path.moveTo(Device.convertPixelsToDp(614.0f, context), Device.convertPixelsToDp(920.0f, context));
-            path.lineTo(Device.convertPixelsToDp(614.0f, context), Device.convertPixelsToDp(1210.0f, context));
-            path.lineTo(Device.convertPixelsToDp(730.0f, context), Device.convertPixelsToDp(1210.0f, context));
+            path.lineTo(Device.convertPixelsToDp(614.0f, context), Device.convertPixelsToDp(1258.0f, context));
+            path.lineTo(Device.convertPixelsToDp(730.0f, context), Device.convertPixelsToDp(1258.0f, context));
             path.lineTo(Device.convertPixelsToDp(730.0f, context), Device.convertPixelsToDp(790.0f, context));
             path.lineTo(Device.convertPixelsToDp(810.0f, context), Device.convertPixelsToDp(790.0f, context));
             path.lineTo(Device.convertPixelsToDp(810.0f, context), Device.convertPixelsToDp(1150.0f, context));
@@ -211,8 +224,8 @@ public class ThirdFloorPathBuilder extends View {
         path.lineTo(Device.convertPixelsToDp(3530.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(1150.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(900.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(1150.0f, context));
 
         return path;
     }
@@ -222,19 +235,19 @@ public class ThirdFloorPathBuilder extends View {
         path.lineTo(Device.convertPixelsToDp(4070.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(1150.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(900.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(1150.0f, context));
 
         return path;
     }
 
     private Path room302ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(4610.0f, context), Device.convertPixelsToDp(1180.0f, context));
-        path.lineTo(Device.convertPixelsToDp(4610.0f, context), Device.convertPixelsToDp(1258.0f, context));
+        path.moveTo(Device.convertPixelsToDp(4620.0f, context), Device.convertPixelsToDp(1180.0f, context));
+        path.lineTo(Device.convertPixelsToDp(4620.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(1150.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(900.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(1150.0f, context));
 
         return path;
     }
@@ -244,8 +257,8 @@ public class ThirdFloorPathBuilder extends View {
         path.lineTo(Device.convertPixelsToDp(5160.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(1258.0f, context));
         path.lineTo(Device.convertPixelsToDp(5320.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(900.0f, context));
-        path.lineTo(Device.convertPixelsToDp(5400.0f, context), Device.convertPixelsToDp(1150.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(900.0f, context));
+        path.lineTo(Device.convertPixelsToDp(5420.0f, context), Device.convertPixelsToDp(1150.0f, context));
 
         return path;
     }
@@ -255,6 +268,11 @@ public class ThirdFloorPathBuilder extends View {
         Log.e(TAG, "setPhase called with:" + String.valueOf(phase));
         paint.setPathEffect(createPathEffect(length, phase, 0.0f));
         invalidate(); // will call onDraw
+
+        if (phase == 0.0) {
+            // Proceed to second floor
+            callFragment.showSecondFloor(position);
+        }
     }
 
     private static PathEffect createPathEffect(float pathLength, float phase, float offset) {

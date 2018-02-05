@@ -1,6 +1,7 @@
 package thesis.citemergencysimulator;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,15 +30,14 @@ import java.util.ArrayList;
 import thesis.citemergencysimulator.areas.GroundFloor;
 import thesis.citemergencysimulator.areas.SecondFloor;
 import thesis.citemergencysimulator.areas.ThirdFloor;
+import thesis.citemergencysimulator.helpers.EventListener;
+import thesis.citemergencysimulator.helpers.SessionHelper;
 
 /**
  * Created by Dave Tolentin on 11/3/2017.
  */
-public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
+public class DashboardActivity extends AppCompatActivity implements View.OnClickListener, EventListener {
     private final static String TAG = DashboardActivity.class.getSimpleName();
-
-    // NOTE:
-    // Increment 2 is on December 22
 
     private FrameLayout relativeLayout;
     private FloatingActionButton fabMainBtn;
@@ -71,7 +71,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
+        Log.e(TAG, "On Create!");
         // Set the screen orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -109,9 +109,45 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         fabSFloorBtn.setOnClickListener(this);*/
 
         // Default the display to Ground Floor
-        displayView("Ground Floor Evacuation Route", new SecondFloorFragment(), "");
+        displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
         // Default to pressed state
         btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+    }
+
+    @Override
+    public void sendDataToActivity(int pos) {
+        if (pos == 2) {
+            btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+            btnSecondFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
+        }
+
+        if (pos == 3) {
+            btnGroundFloor.setBackgroundResource(R.drawable.round_button_default_state);
+            btnSecondFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
+            btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
+        }
+    }
+
+    public interface TriggerButton {
+        void triggerButton(int position);
+    }
+
+    public void test() {
+        Log.e(TAG, "Test called!");
+        // View v = this.getLayoutInflater().inflate(R.layout.activity_dashboard, null);
+        // Log.e(TAG, ""+v);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.activity_dashboard, null);
+        Log.e(TAG, ""+view);
+
+        /*Button b = v.findViewById(R.id.btnGroundFloor);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "Button called!");
+            }
+        });*/
     }
 
     @Override
@@ -177,6 +213,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     // Function to display each floor
     private void displayView(String title, Fragment fragment, String roomToPin) {
+        // Reset the session
+        new SessionHelper(this).clearSession();
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Bundle bundle = new Bundle();
@@ -185,7 +223,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body_frame_layout_id, fragment);
             fragmentTransaction.commit();
-            // getSupportActionBar().setTitle(title);
+            getSupportActionBar().setTitle(title);
         }
     }
 
@@ -196,7 +234,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
             btnSecondFloor.setBackgroundResource(R.drawable.round_button_default_state);
             btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
-            displayView("", new GroundFloorFragment(), "");
+            displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
             area = 1;
         }
 
@@ -205,7 +243,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             btnSecondFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
             btnThirdFloor.setBackgroundResource(R.drawable.round_button_default_state);
             btnGroundFloor.setBackgroundResource(R.drawable.round_button_default_state);
-            displayView("", new SecondFloorFragment(), "");
+            displayView("Second Floor Evacuation Route", new SecondFloorFragment(), "");
             area = 2;
         }
 
@@ -214,7 +252,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             btnThirdFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
             btnGroundFloor.setBackgroundResource(R.drawable.round_button_default_state);
             btnSecondFloor.setBackgroundResource(R.drawable.round_button_default_state);
-            displayView("", new ThirdFloorFragment(), "");
+            displayView("Third Floor Evacuation Route", new ThirdFloorFragment(), "");
             area = 3;
         }
 
@@ -316,12 +354,24 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         builder.setView(convertView);
         String title = "Ground Floor";
         String where[] = GroundFloor.where; // Default to ground floor
-        if (area == 2) {
+
+        final String actionBarTitle[] = getSupportActionBar().getTitle().toString().split(" ");
+        Log.e(TAG, "Toolbar text: "+actionBarTitle[0]);
+        /*if (area == 2) {
             title = "Second Floor";
             where = SecondFloor.where;
         }
 
         if (area == 3) {
+            title = "Third Floor";
+            where = ThirdFloor.where;
+        }*/
+        if (actionBarTitle[0].equals("Second")) {
+            title = "Second Floor";
+            where = SecondFloor.where;
+        }
+
+        if (actionBarTitle[0].equals("Third")) {
             title = "Third Floor";
             where = ThirdFloor.where;
         }
@@ -345,10 +395,10 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                  * area = 3 (Third Floor)
                  * where[position] = Holds the rooms in each floors
                  */
-                if (area == 1) {
+                if (actionBarTitle[0].equals("Ground")) {
                     displayView("Ground Floor Evacuation Route", new GroundFloorFragment(),
                             GroundFloor.where[position]);
-                } else if (area == 2) {
+                } else if (actionBarTitle[0].equals("Second")) {
                     displayView("Ground Floor Evacuation Route", new SecondFloorFragment(),
                             SecondFloor.where[position]);
                 } else {
