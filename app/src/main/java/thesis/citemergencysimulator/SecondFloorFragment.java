@@ -2,6 +2,7 @@ package thesis.citemergencysimulator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -244,65 +245,70 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
 
                     imgSecondFloor.setImageDrawable(null);
 
+                    Bitmap b = null;
+                    int dir = -1;
                     if (id == 0) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default, 200, 200));
-                        pathView.init(0, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default, 200, 200);
+                        dir = 0;
                     }
 
                     if (id == 1) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_1, 200, 200));
-                        pathView.init(1, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_1, 200, 200);
+                        dir = 1;
                     }
 
                     if (id == 2) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_2, 200, 200));
-                        pathView.init(2, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_2, 200, 200);
+                        dir = 2;
                     }
 
                     if (id == 3) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_3, 200, 200));
-                        pathView.init(3, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_3, 200, 200);
+                        dir = 3;
                     }
 
                     if (id == 4) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_4, 200, 200));
-                        pathView.init(4, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_4, 200, 200);
+                        dir = 4;
                     }
 
                     if (id == 5) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_5, 200, 200));
-                        pathView.init(5, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_5, 200, 200);
+                        dir = 5;
                     }
 
                     if (id == 6) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_6, 200, 200));
-                        pathView.init(6, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_6, 200, 200);
+                        dir = 6;
                     }
 
                     if (id == 7) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_7, 200, 200));
-                        pathView.init(7, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_7, 200, 200);
+                        dir = 7;
                     }
 
                     if (id == 8) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_8, 200, 200));
-                        pathView.init(8, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_8, 200, 200);
+                        dir = 8;
                     }
 
                     if (id == 9) {
-                        imgSecondFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_second_floor_default_9, 200, 200));
-                        pathView.init(9, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_second_floor_default_9, 200, 200);
+                        dir = 9;
                     }
+
+                    pathView.init(dir, imgMarker);
+                    imgSecondFloor.setImageBitmap(b);
                 }
             });
         }

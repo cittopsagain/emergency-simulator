@@ -1,6 +1,7 @@
 package thesis.citemergencysimulator;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PathEffect;
 import android.graphics.Point;
@@ -89,6 +90,9 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
         } else {
             Log.e(TAG, "Value after fragment reload: "+valAfterReload);
         }
+
+        float density = getContext().getResources().getDisplayMetrics().density;
+        Log.e(TAG, "Density: "+density);
 
         try {
             countDownTimer.cancel();
@@ -343,6 +347,9 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                         }
                     }
 
+                    Bitmap b = null;
+                    int dir = -1;
+
                     // Left Rooms
                     if (id == 0) {
                         // Left Elementary Library
@@ -364,9 +371,9 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                         b.putString("pin", "0");
                         f.setArguments(b);*/
                         // ft.detach(f).attach(f).commit();
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_1, 360, 360));
-                        pathView.init(0, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_1, 360, 360);
+                        dir = 0;
 
                         /*value = String.valueOf(id);
                         valAfterReload = 0;*/
@@ -376,8 +383,8 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                         // ic_ground_floor_2
                         // Room 112
                         // pathView.init(1, imgMarker);
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_2, 360, 360));
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_2, 360, 360);
                         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                         Fragment f = new GroundFloorFragment();
                         /*Bundle b = new Bundle();
@@ -385,94 +392,97 @@ public class GroundFloorFragment extends Fragment implements ZoomLayout.CallFrag
                         f.setArguments(b);*/
                         sessionHelper.setRoomNum(1);
                         // ft.detach(f).attach(f).commit();
-                        pathView.init(1, imgMarker);
+                        dir = 1;
                     }
 
                     if (id == 2) {
                         // ic_ground_floor_3
                         // Room 111
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_3, 360, 360));
-                        pathView.init(2, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_3, 360, 360);
+                        dir = 2;
                     }
 
                     if (id == 3) {
                         // ic_ground_floor_4
                         // Room 110
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_4, 360, 360));
-                        pathView.init(3, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_4, 360, 360);
+                        dir = 3;
                     }
 
                     if (id == 4) {
                         // ic_ground_floor_5
                         // Room 109
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_5, 360, 360));
-                        pathView.init(4, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_5, 360, 360);
+                        dir = 4;
                     }
 
                     if (id == 5) {
                         // Left stairs
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_default_1, 360, 360));
-                        pathView.init(5, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_default_1, 360, 360);
+                        dir = 5;
                     }
 
                     if (id == 6) {
                         // ic_ground_floor_6
                         // Room 108
                         imgGroundFloor.setImageDrawable(null);
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_6, 360, 360));
-                        pathView.init(6, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_6, 360, 360);
+                        dir = 6;
                     }
 
                     if (id == 7) {
                         // ic_ground_floor_7
                         // Room 107
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_7, 360, 360));
-                        pathView.init(7, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_7, 360, 360);
+                        dir = 7;
                     }
 
                     if (id == 8) {
                         // ic_ground_floor_8
                         // Room 106
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_8, 360, 360));
-                        pathView.init(8, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_8, 360, 360);
+                        dir = 8;
                     }
 
                     if (id == 9) {
                         // ic_ground_floor_9
                         // Room 105
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_9, 360, 360));
-                        pathView.init(9, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_9, 360, 360);
+                        dir = 9;
                     }
 
                     if (id == 10) {
                         // Right Stairs
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_default_1, 360, 360));
-                        pathView.init(10, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_default_1, 360, 360);
+                        dir = 10;
                     }
 
                     if (id == 11) {
                         // ic_ground_floor_10
                         // Right Elementary Library
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_10, 360, 360));
-                        pathView.init(11, imgMarker);
+                        b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_10, 360, 360);
+                        dir = 11;
                     }
 
                     if (id == 12) {
                         // ic_ground_floor_11
-                        imgGroundFloor.setImageBitmap(imageHelper.decodeSampledBitmapFromResource(getResources(),
-                                R.drawable.ic_ground_floor_11, 360, 360));
-                        pathView.init(12, imgMarker);
+                       b = imageHelper.decodeSampledBitmapFromResource(getResources(),
+                                R.drawable.ic_ground_floor_11, 360, 360);
+                        dir = 12;
                     }
+
+                    pathView.init(dir, imgMarker);
+                    imgGroundFloor.setImageBitmap(b);
                 }
             });
         }

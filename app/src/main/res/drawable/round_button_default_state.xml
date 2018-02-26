@@ -3,13 +3,13 @@
     <item android:state_pressed="false">
         <shape android:shape="oval">
             <!-- <solid android:color="#fa09ad"/> -->
-            <solid android:color="@color/colorGold"/>
+            <solid android:color="@color/colorDarkGold1"/>
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape android:shape="oval">
             <!-- <solid android:color="#c20586"/> -->
-            <solid android:color="@color/colorDarkGold"/>
+            <solid android:color="@color/colorDarkGold1"/>
         </shape>
     </item>
 </selector>

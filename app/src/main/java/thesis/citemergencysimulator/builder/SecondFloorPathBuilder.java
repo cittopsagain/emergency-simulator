@@ -65,6 +65,16 @@ public class SecondFloorPathBuilder extends View {
         this.context = context;
     }
 
+    private float getX(float x) {
+        // return (Device.getScreenWidth() / Device.DEFAULT_SCREEN_WIDTH) * x;
+        return (Device.DEFAULT_SCREEN_WIDTH / Device.getScreenWidth()) * x;
+    }
+
+    private float getY(float y) {
+        // return (Device.getScreenHeight() / Device.DEFAULT_SCREEN_HEIGHT) * y;
+        return (Device.DEFAULT_SCREEN_HEIGHT / Device.getScreenHeight()) * y;
+    }
+
     public void init(int direction, ImageView imgView) {
         imgView.setVisibility(View.VISIBLE);
         // Note: You cannot run all the animations
@@ -78,7 +88,7 @@ public class SecondFloorPathBuilder extends View {
 
         paint = new Paint();
         paint.setColor(Color.RED);
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(6);
         paint.setStyle(Paint.Style.STROKE);
 
         position = direction;
@@ -312,9 +322,13 @@ public class SecondFloorPathBuilder extends View {
         paint.setPathEffect(createPathEffect(length, phase, 0.0f));
         invalidate(); // will call onDraw
 
-        if (phase == 0.0) {
-            // Proceed to ground floor
-            callFragment.showGroundFloor(position);
+        try {
+            if (phase == 0.0) {
+                // Proceed to ground floor
+                callFragment.showGroundFloor(position);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
