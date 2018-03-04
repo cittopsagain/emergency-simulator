@@ -517,12 +517,16 @@ public class GroundFloorPathBuilder extends View {
         super.onDraw(c);
         // height = c.getHeight();
         // width = c.getWidth();
+
+        Log.e(TAG, "Canvas Width: "+c.getWidth()+" Canvas Height: "+c.getHeight());
+
         try {
             // paint.setPathEffect(pathEffect());
             c.drawPath(path, paint);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
         Log.e(TAG, "On draw");
     }
 }

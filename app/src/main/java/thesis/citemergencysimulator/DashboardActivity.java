@@ -110,6 +110,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         // Default the display to Ground Floor
         displayView("Ground Floor Evacuation Route", new GroundFloorFragment(), "");
+        // displayView("Ground Floor Evacuation Route", new ThirdFloorFragment(), "");
         // Default to pressed state
         btnGroundFloor.setBackgroundResource(R.drawable.round_button_pressed_state);
     }

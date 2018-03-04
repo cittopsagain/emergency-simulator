@@ -88,7 +88,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 0) {
                 LeftCRToExit(path, 1);
                 float x = getX(450.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -96,7 +96,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 1) {
                 room309ToExit(path);
                 float x = getX(1040.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -104,7 +104,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 2) {
                 room308ToExit(path);
                 float x = getX(1540.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -112,7 +112,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 3) {
                 room307ToExit(path);
                 float x = getX(2010.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -124,7 +124,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 5) {
                 room305ToExit(path);
                 float x = getX(3010.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -132,7 +132,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 6) {
                 room304ToExit(path);
                 float x = getX(3500.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -140,7 +140,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 7) {
                 room303ToExit(path);
                 float x = getX(3980.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -148,7 +148,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 8) {
                 room302ToExit(path);
                 float x = getX(4460.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -156,7 +156,7 @@ public class ThirdFloorPathBuilder extends View {
             if (direction == 9) {
                 room301ToExit(path);
                 float x = getX(4950.0f);
-                float y = getY(760.0f);
+                float y = getY(540.0f);
                 imgView.setX(Device.convertPixelsToDp(x, context));
                 imgView.setY(Device.convertPixelsToDp(y, context));
             }
@@ -176,12 +176,12 @@ public class ThirdFloorPathBuilder extends View {
     private Path LeftCRToExit(Path path, int pos) {
         if (pos == 1) {
             // Left side
-            path.moveTo(Device.convertPixelsToDp(getX(614.0f), context), Device.convertPixelsToDp(getY(920.0f), context));
-            path.lineTo(Device.convertPixelsToDp(getX(614.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-            path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-            path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-            path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-            path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+            path.moveTo(Device.convertPixelsToDp(getX(614.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+            path.lineTo(Device.convertPixelsToDp(getX(614.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+            path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+            path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+            path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+            path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
         } else {
             // Right side
 
@@ -191,100 +191,100 @@ public class ThirdFloorPathBuilder extends View {
     }
 
     private Path room309ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(970.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(970.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(970.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(970.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
 
         return path;
     }
 
     private Path room308ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(1540.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(1540.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(1540.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(1540.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
 
         return path;
     }
 
     private Path room307ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(2100.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(2100.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(2100.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(2100.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
 
         return path;
     }
 
     private Path room306ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(2650.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(2650.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(2650.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(2650.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
 
         return path;
     }
 
     private Path room305ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(3000.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(3000.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(790.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(3000.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(3000.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(730.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(600.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(810.0f), context), Device.convertPixelsToDp(getY(960.0f), context));
 
         return path;
     }
 
     private Path room304ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(3530.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(3530.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(3530.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(3530.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(940.0f), context));
 
         return path;
     }
 
     private Path room303ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(4070.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(4070.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(4070.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(4070.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(940.0f), context));
 
         return path;
     }
 
     private Path room302ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(4620.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(4620.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(4620.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(4620.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(940.0f), context));
 
         return path;
     }
 
     private Path room301ToExit(Path path) {
-        path.moveTo(Device.convertPixelsToDp(getX(5160.0f), context), Device.convertPixelsToDp(getY(1180.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5160.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1258.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(900.0f), context));
-        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(1150.0f), context));
+        path.moveTo(Device.convertPixelsToDp(getX(5160.0f), context), Device.convertPixelsToDp(getY(980.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5160.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(1050.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5320.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(700.0f), context));
+        path.lineTo(Device.convertPixelsToDp(getX(5420.0f), context), Device.convertPixelsToDp(getY(940.0f), context));
 
         return path;
     }
