@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -21,11 +22,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -53,6 +59,8 @@ public class ThirdFloorFragment extends Fragment implements ZoomLayout.CallFragm
     private String value;
     private ZoomLayout zoomLayout;
     private EventListener listener;
+
+    private int dir = -1;
 
     private int resId;
 
@@ -215,7 +223,7 @@ public class ThirdFloorFragment extends Fragment implements ZoomLayout.CallFragm
                     // imgThirdFloor.setImageDrawable(null);
 
                     Bitmap b = null;
-                    int dir = -1;
+                    imgThirdFloor.clearAnimation();
                     if (id == 0) {
                         /*b = imageHelper.decodeSampledBitmapFromResource(getResources(),
                                 R.drawable.ic_second_floor_default, 200, 200);*/
@@ -296,13 +304,25 @@ public class ThirdFloorFragment extends Fragment implements ZoomLayout.CallFragm
                         dir = 9;
                     }
 
+
+                    // Execute only the animation if the image is successfully loaded
                     Glide.with(getActivity()).load(resId).apply(
-                            new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                    ).into(imgThirdFloor);
+                            new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate()
+                    ).listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.e(TAG, "Image loaded successfully!");
+                            pathView.init(dir, imgMarker);
+                            return false;
+                        }
+                    }).into(imgThirdFloor);
 
                     Glide.get(getActivity()).clearMemory();
-
-                    pathView.init(dir, imgMarker);
                     // imgThirdFloor.setImageBitmap(b);
                 }
             });
@@ -415,32 +435,143 @@ public class ThirdFloorFragment extends Fragment implements ZoomLayout.CallFragm
     }
 
     @Override
-    public void showSecondFloor(int position) {
-        countDownTimer.cancel();
+    public void showSecondFloor(int position, ArrayList<Integer> buildPath) {
+
+        if (buildPath.size() == 1) {
+            Log.e(TAG, "Call Second Floor :)");
+
+        }
+
+        if (buildPath.size() >= 5) {
+            /*Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            };
+            runnable.run();*/
+            /*countDownTimer = new CountDownTimer(1000000000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    Log.e(TAG, "Here OnThick!!!!");
+                }
+
+                public void onFinish() {
+
+                }
+            };
+            countDownTimer.start();*/
+        }
+        // countDownTimer.cancel();
         Log.e(TAG, "Position: "+position);
         // Show the ground floor
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        SecondFloorFragment secondFloorFragment = new SecondFloorFragment();
-        Bundle bundle = new Bundle();
-        // Pass the position, will be used to determine what stairs to use
-        int stairs = 0;
-        Log.e(TAG, "Position: "+position);
-        if (position <= 5) {
-            // Left stairs
-            stairs = 5;
-        } else {
-            // Right stairs
-            stairs = 10;
-        }
-        Log.e(TAG, "Show second floor: "+stairs+" with position: "+position);
-        bundle.putInt("stairs", stairs);
-        secondFloorFragment.setArguments(bundle);
 
-        listener.sendDataToActivity(3);
-
-        fragmentTransaction.replace(R.id.container_body_frame_layout_id, secondFloorFragment);
+        // fragmentTransaction.commit();
         // fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        // fragmentTransaction.commit();
+
+        if (buildPath.size() == 1) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            SecondFloorFragment secondFloorFragment = new SecondFloorFragment();
+            Bundle bundle = new Bundle();
+            // Pass the position, will be used to determine what stairs to use
+            int stairs = 0;
+            Log.e(TAG, "Position: "+position);
+            if (position <= 5) {
+                // Left stairs
+                stairs = 5;
+            } else {
+                // Right stairs
+                stairs = 10;
+            }
+            Log.e(TAG, "Show second floor: "+stairs+" with position: "+position);
+            bundle.putInt("stairs", stairs);
+            secondFloorFragment.setArguments(bundle);
+
+            listener.sendDataToActivity(3);
+
+            fragmentTransaction.replace(R.id.container_body_frame_layout_id, secondFloorFragment);
+
+            // fragmentTransaction.commit();
+        }
+
+        if (buildPath.size() >= 10) {
+            // fragmentTransaction.commit();
+            /*Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Log.e(TAG, "Call Second Floor :( Called after 5 seconds!");
+                    // fragmentTransaction.commit();
+                }
+            }, 7000);*/
+
+            try {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                SecondFloorFragment secondFloorFragment = new SecondFloorFragment();
+                Bundle bundle = new Bundle();
+                // Pass the position, will be used to determine what stairs to use
+                int stairs = 0;
+                Log.e(TAG, "Position: "+position);
+                if (position <= 5) {
+                    // Left stairs
+                    stairs = 5;
+                } else {
+                    // Right stairs
+                    stairs = 10;
+                }
+                Log.e(TAG, "Show second floor: "+stairs+" with position: "+position);
+                bundle.putInt("stairs", stairs);
+                secondFloorFragment.setArguments(bundle);
+
+                listener.sendDataToActivity(3);
+
+                fragmentTransaction.replace(R.id.container_body_frame_layout_id, secondFloorFragment);
+
+                // fragmentTransaction.commit();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void finishDrawing(int position, ArrayList<String> arrayList) {
+        if (arrayList.size() > 0) {
+            boolean isFinish = false;
+            for (int i = 0; i < arrayList.size(); i++) {
+                Log.e(TAG, "Finish Drawing!!"+arrayList.get(i));
+                if (arrayList.get(i).equals("END")) {
+                    isFinish = true;
+                    break;
+                }
+            }
+
+            if (isFinish) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                SecondFloorFragment secondFloorFragment = new SecondFloorFragment();
+                Bundle bundle = new Bundle();
+                // Pass the position, will be used to determine what stairs to use
+                int stairs = 0;
+                Log.e(TAG, "Position: "+position);
+                if (position <= 5) {
+                    // Left stairs
+                    stairs = 5;
+                } else {
+                    // Right stairs
+                    stairs = 10;
+                }
+                Log.e(TAG, "Show second floor: "+stairs+" with position: "+position);
+                bundle.putInt("stairs", stairs);
+                secondFloorFragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.container_body_frame_layout_id, secondFloorFragment);
+
+                fragmentTransaction.commit();
+
+                listener.sendDataToActivity(3);
+            }
+        }
     }
 
     @Override

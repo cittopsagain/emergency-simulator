@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -21,11 +22,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -55,6 +61,7 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
     private EventListener listener;
 
     private int resId;
+    private int dir = -1;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -240,6 +247,8 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
                 @Override
                 public void onClick(View v) {
 
+                    imgSecondFloor.clearAnimation();
+
                     // Pressed state
                     // roomButton[v.getId()].setBackgroundColor(Color.parseColor("#9b1516"));
 
@@ -255,7 +264,6 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
                     // imgSecondFloor.setImageDrawable(null);
 
                     Bitmap b = null;
-                    int dir = -1;
                     if (id == 0) {
                         /*b = imageHelper.decodeSampledBitmapFromResource(getResources(),
                                 R.drawable.ic_second_floor_default, 200, 200);*/
@@ -336,12 +344,21 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
                     }
 
                     Glide.with(getActivity()).load(resId).apply(
-                            new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                    ).into(imgSecondFloor);
+                            new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate()
+                    ).listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            pathView.init(dir, imgMarker);
+                            return false;
+                        }
+                    }).into(imgSecondFloor);
 
                     Glide.get(getActivity()).clearMemory();
-
-                    pathView.init(dir, imgMarker);
                     // imgSecondFloor.setImageBitmap(b);
                 }
             });
@@ -425,8 +442,18 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
         }
 
         Glide.with(getActivity()).load(resId).apply(
-                new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-        ).into(imgSecondFloor);
+                new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate()
+        ).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                return false;
+            }
+        }).into(imgSecondFloor);
 
         Glide.get(getActivity()).clearMemory();
 
@@ -499,7 +526,7 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
 
         fragmentTransaction.replace(R.id.container_body_frame_layout_id, groundFloorFragment);
         // fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        // fragmentTransaction.commit();
         DashboardActivity dashboardActivity = new DashboardActivity();
         // dashboardActivity.test();
 
@@ -513,6 +540,49 @@ public class SecondFloorFragment extends Fragment implements ZoomLayout.CallFrag
         Button myButton = view.findViewById(R.id.btnGroundFloor);
         myButton.setVisibility(View.GONE);
         Log.e(TAG, ""+myButton);*/
+    }
+
+    @Override
+    public void finishDrawing(int position, ArrayList<String> arrayList) {
+        if (arrayList.size() > 0) {
+            boolean isFinish = false;
+            for (int i = 0; i < arrayList.size(); i++) {
+                Log.e(TAG, "Finish Drawing!!" + arrayList.get(i));
+                if (arrayList.get(i).equals("END")) {
+                    isFinish = true;
+                    break;
+                }
+            }
+
+            if (isFinish) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                GroundFloorFragment groundFloorFragment = new GroundFloorFragment();
+                Bundle bundle = new Bundle();
+                // Pass the position, will be used to determine what stairs to use
+                int stairs = 0;
+                Log.e(TAG, "Position : "+position);
+                Log.e(TAG, "Position >> "+position);
+                if (position <= 5 || position == 10) {
+                    // Left stairs
+                    stairs = 5;
+                    Log.e(TAG, "Go to left stairs!");
+                } else {
+                    // Right stairs
+                    stairs = 10;
+                    Log.e(TAG, "Go to right stairs!");
+                }
+                Log.e(TAG, "Show ground floor: "+stairs+" with position: "+position);
+                Log.e(TAG, "What stairs >> "+stairs);
+                bundle.putInt("stairs", stairs);
+                groundFloorFragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.container_body_frame_layout_id, groundFloorFragment);
+                // fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+                listener.sendDataToActivity(2);
+            }
+        }
     }
 
     @Override

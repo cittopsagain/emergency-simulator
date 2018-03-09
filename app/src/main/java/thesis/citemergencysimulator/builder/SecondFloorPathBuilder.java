@@ -1,6 +1,9 @@
 package thesis.citemergencysimulator.builder;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -14,11 +17,14 @@ import android.graphics.Path;
 import android.graphics.PathDashPathEffect;
 import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import thesis.citemergencysimulator.DashboardActivity;
 import thesis.citemergencysimulator.GroundFloorFragment;
@@ -40,10 +46,21 @@ public class SecondFloorPathBuilder extends View {
     private Context context;
     private int position;
 
+    private ObjectAnimator animator;
+
+    private ArrayList<Float> animatedValueList = new ArrayList<>();
+    private ArrayList<String> startList = new ArrayList<>();
+    private ArrayList<String> endList = new ArrayList<>();
+    private ArrayList<String> runList = new ArrayList<>();
+    private ArrayList<Integer> dirList = new ArrayList<>();
+
+    private ArrayList<String> animationList = new ArrayList<>();
+
     private static final String TAG = GroundFloorPathBuilder.class.getSimpleName();
 
     public interface CallFragment {
         void showGroundFloor(int position);
+        void finishDrawing(int position, ArrayList<String> arrayList);
     }
 
     private static CallFragment callFragment = null;
@@ -81,7 +98,24 @@ public class SecondFloorPathBuilder extends View {
         height = Device.getScreenHeight();
         width = Device.getScreenWidth();
 
+        // Stopping the animation, useful when tapping multiple rooms
+        try {
+            if (animator.isRunning()) {
+                animator.end();
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+
         Log.e(TAG, "Width: " + width + " Height: " + height);
+
+        if (animationList.size() > 0) {
+            for (int i = 0; i < animationList.size(); i++) {
+                if (animationList.get(i).equals("END")) {
+                    animationList.set(i, "START");
+                }
+            }
+        }
 
         // Bring the marker at the top of button
         imgView.bringToFront();
@@ -176,10 +210,224 @@ public class SecondFloorPathBuilder extends View {
 
         float[] intervals = new float[]{length, length};
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(SecondFloorPathBuilder.this,
+        /*animator = ObjectAnimator.ofFloat(SecondFloorPathBuilder.this,
                 "phase", 1.0f, 0.0f);
         animator.setDuration(3000);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (animationList.size() > 0) {
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+
+                super.onAnimationEnd(animation);
+
+                animationList.add("END");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                super.onAnimationRepeat(animation);
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (animationList.size() > 0) {
+                    Log.e(TAG, "Last animation: "+animationList.get(animationList.size() - 1));
+                    // animationList.set(animationList.size() - 1, "START");
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+
+                super.onAnimationStart(animation);
+
+                animationList.add("START");
+
+                if (animationList.size() > 0) {
+                    Log.e(TAG, "Last animation: "+animationList.get(animationList.size() - 1));
+                    // animationList.set(animationList.size() - 1, "START");
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationPause(Animator animation) {
+                super.onAnimationPause(animation);
+            }
+
+            @Override
+            public void onAnimationResume(Animator animation) {
+                super.onAnimationResume(animation);
+            }
+        });
+        animator.start();*/
+
+        animator = ObjectAnimator.ofFloat(SecondFloorPathBuilder.this,
+                "phase", 1.0f, 0.0f);
+        // animator.setRepeatCount(ValueAnimator.INFINITE); // Infinite animation
+        animator.setDuration(3000);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                Log.e(TAG, "Animation Cancel");
+
+                if (dirList.size() > 1) {
+                    // dirList.clear();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (animationList.size() > 0) {
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "Animation End");
+                Log.e(TAG, "Is running: "+animation.isRunning());
+                endList.add("END");
+
+                for (int i = 0; i < animationList.size(); i++) {
+                    Log.e(TAG, "On animation end: "+animationList.get(i));
+                }
+
+                animationList.add("END");
+
+                Log.e(TAG, "On animation end: "+animationList.get(animationList.size() - 1));
+
+                for (int i = 0; i < animationList.size(); i++) {
+                    Log.e(TAG, "Final Animation List: "+animationList.get(i));
+                }
+
+                if (startList.size() != 1 && endList.size() != 1) {
+                    if (startList.size() == endList.size()) {
+
+                        // callFragment.showSecondFloor(position, dirList);
+
+                        /*Log.e(TAG, "List End Trigger Second Floor: "+endList.size());
+                        showSecondFlor = true;*/
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                Log.e(TAG, "Call Second Floor :( Called after 5 seconds!");
+                                runList.add("RUN");
+                            }
+                        }, 7000);
+
+                        Log.e(TAG, "Call Second Floor :( Need to wait for about 5 seconds!");
+                    }
+                }
+                Log.e(TAG, "List End: "+endList.size());
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                super.onAnimationRepeat(animation);
+                Log.e(TAG, "Animation Repeat");
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (animationList.size() > 0) {
+                    Log.e(TAG, "Last animation: "+animationList.get(animationList.size() - 1));
+                    // animationList.set(animationList.size() - 1, "START");
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+
+                super.onAnimationStart(animation);
+                startList.add("START");
+                Log.e(TAG, "Animation Start");
+                Log.e(TAG, "List Start: "+startList.size());
+
+                animationList.add("START");
+
+                if (animationList.size() > 0) {
+                    Log.e(TAG, "Last animation: "+animationList.get(animationList.size() - 1));
+                    // animationList.set(animationList.size() - 1, "START");
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+
+                if (dirList.size() > 1) {
+                    // dirList.clear();
+                }
+            }
+
+            @Override
+            public void onAnimationPause(Animator animation) {
+                super.onAnimationPause(animation);
+            }
+
+            @Override
+            public void onAnimationResume(Animator animation) {
+                super.onAnimationResume(animation);
+                Log.e(TAG, "Animation Resume ");
+            }
+        });
         animator.start();
+
+        Log.e(TAG, "Animated Duration: ");
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Log.e(TAG, "Add update listener: "+animation.getAnimatedValue());
+                animatedValueList.add((Float)animation.getAnimatedValue());
+                if (animationList.size() > 0) {
+                    for (int i = 0; i < animationList.size(); i++) {
+                        if (animationList.get(i).equals("END")) {
+                            animationList.set(i, "START");
+                        }
+                    }
+                }
+            }
+        });
+
+        for (int i = 0; i < animatedValueList.size(); i++) {
+            Log.e(TAG, "Value List: "+i+" << "+animatedValueList.get(i)+" >> Trigger second floor");
+            try {
+                /*if (animatedValueList.get((i + 1)).isNaN()) {
+                    Log.e(TAG, "Value List: "+i+" << "+animatedValueList.get(i)+" >> Trigger second floor");
+                } else {
+                    Log.e(TAG, "Value List: "+i+" << "+animatedValueList.get(i));
+                }*/
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < animationList.size(); i++) {
+            // Log.e(TAG, "Outside animation: "+animationList.get(i));
+        }
+        // Log.e(TAG, "Get Animation: "+this.getX());
     }
 
     private Path LeftCRToExit(Path path, int pos) {
@@ -320,16 +568,19 @@ public class SecondFloorPathBuilder extends View {
     public void setPhase(float phase) {
         Log.e(TAG,"setPhase called with:" + String.valueOf(phase));
         paint.setPathEffect(createPathEffect(length, phase, 0.0f));
-        invalidate(); // will call onDraw
 
         try {
             if (phase == 0.0) {
                 // Proceed to ground floor
-                callFragment.showGroundFloor(position);
+                // callFragment.showGroundFloor(position);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+
+        // Put logic here, can handle multiple tapping of floors
+        invalidate(); // will call onDraw
     }
 
     private static PathEffect createPathEffect(float pathLength, float phase, float offset) {
@@ -381,6 +632,21 @@ public class SecondFloorPathBuilder extends View {
             c.drawPath(path, paint);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        /*if (animationList.size() > 0) {
+            for (int i = 0; i < animationList.size(); i++) {
+                if (animationList.get(i).equals("END")) {
+                    animationList.set(i, "START");
+                }
+            }
+        }*/
+        callFragment.finishDrawing(position, animationList);
+        if (animationList.size() > 0) {
+            for (int i = 0; i < animationList.size(); i++) {
+                if (animationList.get(i).equals("END")) {
+                    animationList.set(i, "START");
+                }
+            }
         }
         Log.e(TAG, "On draw");
     }
